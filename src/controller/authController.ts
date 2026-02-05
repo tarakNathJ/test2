@@ -248,3 +248,26 @@ export async function SetAvailability(
     });
   }
 }
+
+export async function getServices(req: Request, res: Response): Promise<any> {
+  try {
+    const type = req.params.type;
+    if (!type) {
+      return res.status(500).json({
+        error: "type not found ",
+      });
+    }
+
+    const findSvc = await prisma.service.findMany({
+      where: {
+        type: type as any,
+      },
+    });
+
+    return res.status(200).json({ success: true, data: findSvc });
+  } catch (error: any) {
+    return res.status(500).json({
+      error: "Internal server error",
+    });
+  }
+}
